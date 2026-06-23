@@ -75,15 +75,13 @@
 
     /* ─── ESCENA ─── */
     #escena {
-      display: none;
-      min-height: 100vh;
-      max-width: 760px;
-      margin: 0 auto ;
-      padding: 60px 32px 80px;
-      background: 
-      background-size: 200px 200px;
-      background: var(--negro);
-    }
+  display: none;
+  min-height: 100vh;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 60px 32px 80px;
+  background: var(--negro);
+}
 
     /* ─── TEXTO ─── */
     #texto-contenedor {
@@ -587,8 +585,6 @@ Mañana vuelve a empezar. Y eso, piensa, también es una forma de ganar.`,
 // ─────────────────────────────────────────
 //  MOTOR
 // ─────────────────────────────────────────
-let nodoActual = null;
-
 function pantallaCompleta() {
   const el = document.documentElement;
   if (el.requestFullscreen) {
@@ -598,7 +594,9 @@ function pantallaCompleta() {
   } else if (el.mozRequestFullScreen) {
     el.mozRequestFullScreen();
   }
-  iniciarHistoria();
+  document.getElementById('portada').style.display = 'none';
+  document.getElementById('escena').style.display = 'block';
+  irA('inicio');
 }
 
 function irA(id) {
@@ -609,16 +607,14 @@ function irA(id) {
   const contenedor = document.getElementById('texto-contenedor');
   const opciones = document.getElementById('opciones');
   const label = document.getElementById('capitulo-label');
+  const imgContenedor = document.getElementById('imagen-contenedor');
 
   opciones.classList.remove('visible');
   opciones.innerHTML = '';
   label.textContent = nodo.capitulo || '';
+  imgContenedor.innerHTML = nodo.imagen ? '<img src="' + nodo.imagen + '" class="img-escena">' : '';
+  contenedor.textContent = '';
 
-  const imgContenedor = document.getElementById('imagen-contenedor');
-imgContenedor.innerHTML = nodo.imagen ? '<img src="' + nodo.imagen + '" class="img-escena">' : '';
-contenedor.innerHTML = '';
-
-  // Efecto máquina de escribir
   const texto = nodo.texto;
   let i = 0;
 
@@ -628,7 +624,6 @@ contenedor.innerHTML = '';
       i++;
       setTimeout(escribir, 22);
     } else {
-      // Mostrar opciones al terminar
       nodo.opciones.forEach(op => {
         const btn = document.createElement('button');
         btn.className = 'opcion-btn';

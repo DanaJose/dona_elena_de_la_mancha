@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doña Elena de la Mancha</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --negro: #0a0a0a;
+      --amarillo: #F5A623;
+      --rojo: #C0392B;
+      --blanco: #f0ead6;
+    }
+
+    body {
+      background: var(--negro);
+      color: var(--amarillo);
+      font-family: 'Special Elite', cursive;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ─── PORTADA ─── */
+    #portada {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      position: relative;
+      cursor: pointer;
+      background: radial-gradient(ellipse at center, #5c0a0a 0%, #0a0a0a 70%);
+    }
+
+    #portada img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center top;
+    }
+
+    #portada .inicio-btn {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 48px;
+      font-family: 'Bangers', cursive;
+      font-size: 28px;
+      letter-spacing: 4px;
+      color: var(--negro);
+      background: var(--amarillo);
+      border: none;
+      padding: 14px 48px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 5px 5px 0 var(--rojo);
+      transition: transform 0.1s, box-shadow 0.1s;
+      animation: pulsar 2s ease-in-out infinite;
+    }
+
+    #portada .inicio-btn:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 3px 3px 0 var(--rojo);
+    }
+
+    @keyframes pulsar {
+      0%, 100% { box-shadow: 5px 5px 0 var(--rojo); }
+      50% { box-shadow: 8px 8px 0 var(--rojo); }
+    }
+
+    /* ─── ESCENA ─── */
+    #escena {
+      display: none;
+      min-height: 100vh;
+      max-width: 760px;
+      margin: 0 auto ;
+      padding: 60px 32px 80px;
+      background: 
+      background-size: 200px 200px;
+      background: var(--negro);
+    }
+
+    /* ─── TEXTO ─── */
+    #texto-contenedor {
+      font-size: 19px;
+      line-height: 1.9;
+      color: var(--amarillo);
+      min-height: 200px;
+      white-space: pre-wrap;
+    }
+
+    /* ─── OPCIONES ─── */
+    #opciones {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    #opciones.visible { opacity: 1; }
+
+    .opcion-btn {
+      font-family: 'Bangers', cursive;
+      font-size: 22px;
+      letter-spacing: 2px;
+      color: var(--rojo);
+      background: transparent;
+      border: none;
+      border-left: 4px solid var(--rojo);
+      padding: 10px 20px;
+      text-align: left;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, transform 0.15s;
+    }
+
+    .opcion-btn:hover {
+      color: var(--amarillo);
+      border-color: var(--amarillo);
+      transform: translateX(8px);
+    }
+
+    /* ─── SEPARADOR ─── */
+    .separador {
+      width: 60px;
+      height: 4px;
+      background: var(--rojo);
+      margin: 40px 0;
+    }
+
+    /* ─── VIDEO ─── */
+    .video-escena {
+      width: 100%;
+      margin-bottom: 32px;
+      border: 3px solid var(--rojo);
+    }
+
+    /* ─── IMAGEN ─── */
+    .img-escena {
+      width: 100%;
+      margin-bottom: 32px;
+      display: block;
+    }
+
+    /* ─── TRANSICIÓN ─── */
+    .fade-out { animation: fadeOut 0.4s ease forwards; }
+    .fade-in  { animation: fadeIn  0.4s ease forwards; }
+
+    @keyframes fadeOut { to { opacity: 0; } }
+    @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ─── ETIQUETA DE CAPÍTULO ─── */
+    .capitulo-label {
+      font-family: 'Bangers', cursive;
+      font-size: 13px;
+      letter-spacing: 5px;
+      color: var(--rojo);
+      margin-bottom: 24px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div id="portada">
+  <img src="img/portada.png" alt="Portada Doña Elena de la Mancha">
+  <button class="inicio-btn" onclick="iniciarHistoria()">▶ Comenzar</button>
+</div>
+
+<!-- ESCENA -->
+<div id="escena">
+  <div class="capitulo-label" id="capitulo-label"></div>
+  <div id="imagen-contenedor"></div>
+  <div id="texto-contenedor"></div>
+  <div class="separador"></div>
+  <div id="opciones"></div>
+</div>
+
+<script>
+// ─────────────────────────────────────────
+//  HISTORIA: nodos
+// ─────────────────────────────────────────
+const nodos = {
+
+  inicio: {
+    capitulo: "San Cristóbal · Un miércoles cualquiera",
+    imagen: "img/inicio.jpg",
+    texto: `San Cristóbal, un miércoles que parece todos los demás.
+
+Doña Elena tiene 76 años y se despierta sola, como siempre. La casa guarda ese silencio particular de los hogares donde ya no quedan visitas frecuentes. Su hijo Claudio llama poco. Ella no dice nada.
+
+Se levanta despacio, va a la cocina, pone el agua a hervir. El mate, el pan, la misma rutina de siempre. Casi sin pensarlo, extiende la mano y enciende el televisor — no por entretenimiento, sino por compañía.
+
+Las noticias la reciben con lo de siempre: los medicamentos aumentaron de nuevo. La jubilación no alcanza. Los jubilados, dice el conductor, "tendrán que esperar".
+
+Doña Elena toma el primer sorbo de mate y no dice nada. Ya sabe cómo termina esto.`,
+    opciones: [
+      { texto: "Ir a la farmacia", destino: "farmacia" },
+      { texto: "Ir al banco", destino: "banco" },
+      { texto: "Seguir mirando la televisión", destino: "tv" },
+      { texto: "Apagar el televisor", destino: "apagar_tv" },
+    ]
+  },
+
+  apagar_tv: {
+    capitulo: "El gesto de apagar",
+    texto: `Doña Elena estira el brazo y apaga el televisor.
+
+El silencio que queda es pesado. La cocina, el mate, la misma mañana de siempre.
+
+Pero algo en ese gesto — apagarlo, elegir no escuchar — la hace sentir que todavía decide algo.
+
+Se levanta. Mira por la ventana. El barrio está ahí, como siempre.`,
+    opciones: [
+      { texto: "Ir a la farmacia", destino: "farmacia" },
+      { texto: "Ir al banco", destino: "banco" },
+    ]
+  },
+
+  farmacia: {
+    capitulo: "La farmacia del barrio",
+    texto: `Doña Elena anota en un papel arrugado los medicamentos que necesita. Los mismos de siempre. Sale a la calle con su bolso, despacio, con la certeza de quien ya sabe que el camino va a ser largo.
+
+La farmacia del barrio huele a desinfectante y paciencia. Hay dos personas adelante. Espera.
+
+Cuando llega su turno, extiende la receta y la cobertura médica sobre el mostrador. El farmacéutico la mira, teclea algo, y sin levantar los ojos dice:
+
+— Estos no están cubiertos desde el mes pasado.
+
+Doña Elena no se mueve.`,
+    opciones: [
+      { texto: "Reclamar ahí mismo", destino: "reclamo_farmacia" },
+      { texto: "Ir a otro lado", destino: "plaza" },
+    ]
+  },
+
+  reclamo_farmacia: {
+    capitulo: "Reclamo heroico",
+    texto: `Doña Elena no se mueve del mostrador.
+
+— Desde el mes pasado, me dice. Y antes del mes pasado ¿quién me avisó? ¿Una carta? ¿Un llamado? Nada.
+
+El farmacéutico la mira ahora. Hay una señora mayor con una receta en la mano y una voz que no tiembla.
+
+— Estos medicamentos los tomo hace cuatro años. No son un capricho. Son lo que me mantiene de pie.
+
+La gente en la fila escucha. Nadie mira el celular.
+
+— Voy a hablar con el supervisor — dice el farmacéutico.
+
+Doña Elena asiente. Sabe que ganó algo, aunque todavía no sabe exactamente qué.`,
+    opciones: [
+      { texto: "Ver qué pasa con el supervisor", destino: "final_farmacia" },
+    ]
+  },
+
+  final_farmacia: {
+    capitulo: "Final · Victoria en la farmacia",
+    texto: `El supervisor es un hombre joven con cara de no querer problemas.
+
+Escucha a Doña Elena. Mira la receta. Teclea algo. Teclea más.
+
+— Tiene razón — dice finalmente. — Fue un error en el sistema. Le cubrimos los medicamentos.
+
+Doña Elena no dice "se lo dije". No hace falta.
+
+Espera mientras preparan el paquete. Lo recibe con las dos manos.
+
+Sale a la calle con los medicamentos en la cartera y el paso un poco más firme que cuando entró.
+
+No fue fácil. Nunca es fácil. Pero hoy, en esta farmacia de barrio, con una receta arrugada y la voz tranquila, Doña Elena ganó.`,
+    opciones: [
+      { texto: "↩ Volver al inicio", destino: "inicio" },
+    ]
+  },
+
+  plaza: {
+    capitulo: "La plaza del barrio",
+    texto: `Doña Elena sale de la farmacia sin los medicamentos y sin saber bien a dónde va.
+
+Los pies la llevan a la plaza del barrio. La de siempre. La de toda la vida.
+
+Está casi vacía a esta hora. Una paloma. Un chico en bicicleta que pasa rápido. El ruido lejano de una radio.
+
+Se sienta en un banco a la sombra y respira.
+
+Piensa en el farmacéutico. En la receta. En los números que vio esta mañana en el televisor.
+
+Algo tiene que hacer. Pero ¿qué?`,
+    opciones: [
+      { texto: "Tomar el colectivo", destino: "colectivo" },
+      { texto: "Ir a ver qué pasa en el Congreso", destino: "congreso" },
+    ]
+  },
+
+  banco: {
+    capitulo: "El banco · Día de cobro",
+    texto: `Era día de cobro. Doña Elena lo tenía marcado en el almanaque desde hacía una semana.
+
+Llega al banco y la fila dobla la esquina. Suspira, toma un número y espera de pie porque los bancos nunca tienen suficientes sillas.
+
+Después de cuarenta minutos la derivan a otro sector. Después de ese sector, a otro.
+
+Finalmente llega al cajero automático. La máquina parpadea con una pantalla azul y letras pequeñas.
+
+— Usted puede hacerlo, doña — dice alguien detrás suyo.`,
+    opciones: [
+      { texto: "Intentar con el cajero", destino: "cajero" },
+      { texto: "Rendirse y esperar a un empleado", destino: "espera_banco" },
+    ]
+  },
+
+  cajero: {
+    capitulo: "Final · El dragón electrónico",
+    texto: `La pantalla parpadea. Doña Elena saca sus anteojos del bolso y los apoya despacio sobre su nariz.
+
+Lee cada instrucción. Una por una.
+
+Ingrese su clave. La ingresa.
+Seleccione operación. La selecciona.
+Ingrese monto. Lo ingresa.
+
+La máquina hace un ruido. Doña Elena no respira.
+
+Y entonces aparecen los billetes.
+
+Los cuenta dos veces. Los guarda en el sobre que trajo de casa especialmente para esto. Lo mete en el fondo de la cartera, abajo de todo.
+
+Sale a la calle. El sol le pega en la cara.
+
+— Le gané — dice en voz baja, para nadie.
+
+Y camina hacia su casa.`,
+    opciones: [
+      { texto: "↩ Volver al inicio", destino: "inicio" },
+    ]
+  },
+
+  espera_banco: {
+    capitulo: "Final · La espera intermitente",
+    texto: `Doña Elena se sienta en una silla de plástico duro contra la pared. Le dijeron que espere.
+
+Espera.
+
+Un empleado pasa y le dice que en un momento la atienden.
+
+Espera.
+
+Otro empleado le dice que el sistema está lento hoy.
+
+Espera.
+
+El banco va cerrando de a poco. Las persianas bajan a medias. La luz fluorescente zumba.
+
+Doña Elena mira el almanaque que tiene en la cartera. Mañana es otro día. Y pasado. Y el que viene.
+
+La fila nunca termina. Solo cambia de forma.`,
+    opciones: [
+      { texto: "↩ Volver al inicio", destino: "inicio" },
+    ]
+  },
+
+  tv: {
+    capitulo: "Las voces del televisor",
+    texto: `Doña Elena decide no salir. Apoya el mate sobre la mesa y se hunde un poco más en el sillón.
+
+El televisor sigue. Un conductor habla rápido, las imágenes se cortan, los números aparecen en pantalla. Jubilaciones. Medicamentos. Ajuste. Déficit.
+
+Palabras que ella conoce con el cuerpo, no con la cabeza.
+
+De a poco algo empieza a moverse adentro suyo. No es bronca todavía. Es algo anterior a la bronca.`,
+    opciones: [
+      { texto: "Dejarse llevar por ese sentimiento", destino: "cambio" },
+      { texto: "Atender el teléfono que suena", destino: "claudio" },
+    ]
+  },
+
+  cambio: {
+    capitulo: "El cambio de personalidad",
+    texto: `Algo se rompe adentro. O tal vez se arma.
+
+Doña Elena apaga el televisor de un manotazo y se queda en el silencio que deja.
+
+Se levanta. Va al cuarto. Se mira en el espejo un momento largo.
+
+La mujer que le devuelve la mirada no es la misma que se sentó a tomar mate esta mañana.
+
+Esa mujer sabía que las cosas estaban mal y lo aguantaba.
+
+Esta otra decide que aguantar no alcanza.
+
+Se pone el saco. Agarra la cartera. Antes de salir escribe en un papel:
+
+"Fui al Congreso. No esperen."`,
+    opciones: [
+      { texto: "Salir a la calle", destino: "salir" },
+    ]
+  },
+
+  salir: {
+    capitulo: "Salir a la calle",
+    texto: `La puerta del edificio suena al cerrarse detrás suyo.
+
+Doña Elena está en la vereda. El aire le pega en la cara, fresco, real.
+
+No sabe exactamente a dónde va. Pero los pies empiezan a moverse solos en dirección al centro.
+
+En la parada del colectivo hay tres personas esperando. Ella se suma sin pensarlo.
+
+Cuando llega el colectivo, sube.`,
+    opciones: [
+      { texto: "Llegar al Congreso", destino: "congreso" },
+    ]
+  },
+
+  claudio: {
+    capitulo: "Final · La llamada de Claudio",
+    texto: `— ¿Mamá? ¿Estás bien?
+
+La voz de Claudio llena el living de golpe. Doña Elena no esperaba escucharla hoy.
+
+— Estoy bien — dice. Y por primera vez en el día, no está mintiendo del todo.
+
+Hablan de poco. Del clima, de una serie que él está viendo, de si ella comió bien. Cosas chicas. Cosas que importan.
+
+Antes de cortar, Claudio dice:
+
+— Te llamo el jueves, ¿sí?
+
+Doña Elena queda con el teléfono en la mano después de que la llamada termina.
+
+Afuera el barrio sigue igual. El televisor apagado refleja la ventana. El mate está frío.
+
+Pero algo adentro está un poco menos solo.`,
+    opciones: [
+      { texto: "↩ Volver al inicio", destino: "inicio" },
+    ]
+  },
+
+  colectivo: {
+    capitulo: "El colectivo · Sancho",
+    texto: `El colectivo está medio lleno. Doña Elena encuentra un asiento junto a la ventana y apoya la cartera sobre las rodillas.
+
+En la parada siguiente sube un hombre mayor. Pelo blanco, campera de tela, una bolsa del súper en cada mano. Se sienta a su lado sin pedir permiso, como hacen los que ya no tienen tiempo que perder.
+
+— Viene del centro — dice, sin preguntar.
+
+— De la farmacia — responde ella.
+
+— Ah. — Asiente como si eso lo explicara todo. — Yo vengo del PAMI. Tres horas para que me digan que vuelva la semana que viene.
+
+Se llama Sancho. Tiene 79 años y una risa corta que aparece donde menos se espera.
+
+— ¿Sabe adónde voy ahora? Al Congreso. Hay una concentración. Poca gente, pero hay. — La miró. — ¿Viene?
+
+Doña Elena mira por la ventana. El barrio pasa despacio.`,
+    opciones: [
+      { texto: "Bajarse con Sancho", destino: "bajarse_sancho" },
+      { texto: "Seguir hasta su parada", destino: "seguir_parada" },
+    ]
+  },
+
+  bajarse_sancho: {
+    capitulo: "Bajarse con Sancho",
+    texto: `Doña Elena agarra su bolso y se para antes de la parada.
+
+— Me bajo — dice.
+
+Sancho sonríe como si lo hubiera sabido desde el principio.
+
+Bajan juntos. La calle frente al Congreso tiene ese ruido particular de la gente reunida con un propósito. No es una fiesta. Es algo más serio y más vivo que eso.
+
+Sancho le señala el grupo con la cabeza.
+
+— Vamos.
+
+Doña Elena lo sigue. Y mientras camina siente que los pies le pesan menos que esta mañana.`,
+    opciones: [
+      { texto: "Llegar al Congreso", destino: "congreso" },
+    ]
+  },
+
+  seguir_parada: {
+    capitulo: "Seguir hasta la parada",
+    texto: `— No, gracias — dice Doña Elena.
+
+Sancho la mira un momento. Asiente despacio, sin juzgar.
+
+— Cuídese — dice mientras se levanta.
+
+El colectivo frena. Sancho baja con sus bolsas y desaparece entre la gente de la vereda.
+
+Doña Elena lo ve alejarse por la ventana.
+
+El colectivo arranca de nuevo. Ella sigue hasta su parada, como todos los días.
+
+Llega a casa. Calienta agua. Enciende el televisor.
+
+Las noticias siguen igual.`,
+    opciones: [
+      { texto: "Seguir mirando la televisión", destino: "tv" },
+    ]
+  },
+
+  congreso: {
+    capitulo: "El Congreso · La plaza",
+    texto: `La plaza frente al Congreso tiene más gente de lo que esperaba.
+
+No son multitudes. Son personas como ella. Con bolsos, con bastones, con carteles escritos a mano con marcador negro.
+
+"NOS DEBEN LA VIDA"
+"JUBILADOS, NO JUBILADOS"
+"MEDICAMENTOS YA"
+
+Doña Elena se para en el medio de todo eso y siente algo extraño. No está sola.
+
+Sancho aparece a su lado con un cartel prestado.
+
+— Agarre — le dice.
+
+Ella lo agarra.
+
+Las horas pasan. Los pies duelen. Alguien reparte agua. Alguien canta algo que ella no conoce pero tararea igual.
+
+Al final del día los legisladores reciben una delegación. Doña Elena no está adentro pero sabe que algo de lo que gritaron entró por esa puerta.`,
+    opciones: [
+      { texto: "La lucha da sus frutos", destino: "final_victoria" },
+      { texto: "La lucha continúa", destino: "final_lucha" },
+    ]
+  },
+
+  final_victoria: {
+    capitulo: "Final · Victoria en el Congreso",
+    texto: `Tres días después el teléfono de Doña Elena suena con una notificación.
+
+Los medicamentos vuelven a estar cubiertos. No todos. Pero los suyos, sí.
+
+Lo lee tres veces para estar segura.
+
+Después llama a Sancho. Él atiende al segundo ring, como si estuviera esperando.
+
+— ¿Vio? — dice él.
+
+— Vi — dice ella.
+
+No hablan mucho más. No hace falta.
+
+Doña Elena cuelga y se queda un momento mirando la cocina, la pava, el almanaque en la pared.
+
+Mañana va a ser otro día difícil. Pero hoy, por una vez, ganaron.`,
+    opciones: [
+      { texto: "↩ Volver al inicio", destino: "inicio" },
+    ]
+  },
+
+  final_lucha: {
+    capitulo: "Final · La lucha sin cesar",
+    texto: `No hubo respuesta oficial.
+
+Doña Elena vuelve a su casa en el colectivo, de pie porque no hay asientos, con los pies que le pesan y el cartel doblado bajo el brazo.
+
+Sancho la acompaña hasta su parada.
+
+— ¿Y ahora? — pregunta ella.
+
+— Ahora descansamos. El jueves hay otra convocatoria.
+
+Se despiden en la esquina. Dos personas mayores bajo la luz anaranjada de la tarde.
+
+Doña Elena sube las escaleras de su casa despacio. Calienta agua. Prepara el mate.
+
+Mañana vuelve a empezar. Y eso, piensa, también es una forma de ganar.`,
+    opciones: [
+      { texto: "↩ Volver al inicio", destino: "inicio" },
+    ]
+  },
+
+};
+
+// ─────────────────────────────────────────
+//  MOTOR
+// ─────────────────────────────────────────
+let nodoActual = null;
+
+function iniciarHistoria() {
+  document.getElementById('portada').style.display = 'none';
+  document.getElementById('escena').style.display = 'block';
+  irA('inicio');
+}
+
+function irA(id) {
+  const nodo = nodos[id];
+  if (!nodo) return;
+  nodoActual = id;
+
+  const contenedor = document.getElementById('texto-contenedor');
+  const opciones = document.getElementById('opciones');
+  const label = document.getElementById('capitulo-label');
+
+  opciones.classList.remove('visible');
+  opciones.innerHTML = '';
+  label.textContent = nodo.capitulo || '';
+
+  const imgContenedor = document.getElementById('imagen-contenedor');
+imgContenedor.innerHTML = nodo.imagen ? '<img src="' + nodo.imagen + '" class="img-escena">' : '';
+contenedor.innerHTML = '';
+
+  // Efecto máquina de escribir
+  const texto = nodo.texto;
+  let i = 0;
+
+  function escribir() {
+    if (i < texto.length) {
+      contenedor.textContent += texto[i];
+      i++;
+      setTimeout(escribir, 22);
+    } else {
+      // Mostrar opciones al terminar
+      nodo.opciones.forEach(op => {
+        const btn = document.createElement('button');
+        btn.className = 'opcion-btn';
+        btn.textContent = '› ' + op.texto;
+        btn.onclick = () => irA(op.destino);
+        opciones.appendChild(btn);
+      });
+      opciones.classList.add('visible');
+    }
+  }
+
+  escribir();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
+

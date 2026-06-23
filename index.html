@@ -171,7 +171,7 @@
 <!-- PORTADA -->
 <div id="portada">
   <img src="img/portada.png" alt="Portada Doña Elena de la Mancha">
-  <button class="inicio-btn" onclick="iniciarHistoria()">▶ Comenzar</button>
+  <button class="inicio-btn" onclick="pantallaCompleta()">▶ Comenzar</button>
 </div>
 
 <!-- ESCENA -->
@@ -589,10 +589,16 @@ Mañana vuelve a empezar. Y eso, piensa, también es una forma de ganar.`,
 // ─────────────────────────────────────────
 let nodoActual = null;
 
-function iniciarHistoria() {
-  document.getElementById('portada').style.display = 'none';
-  document.getElementById('escena').style.display = 'block';
-  irA('inicio');
+function pantallaCompleta() {
+  const el = document.documentElement;
+  if (el.requestFullscreen) {
+    el.requestFullscreen();
+  } else if (el.webkitRequestFullscreen) {
+    el.webkitRequestFullscreen();
+  } else if (el.mozRequestFullScreen) {
+    el.mozRequestFullScreen();
+  }
+  iniciarHistoria();
 }
 
 function irA(id) {

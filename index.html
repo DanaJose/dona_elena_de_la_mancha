@@ -15,34 +15,29 @@
       --blanco: #f0ead6;
     }
 
-    /* ─── PUNTOS BEN-DAY ─── */
-    body {
-      background-color: var(--negro);
-      background-image: radial-gradient(circle, #2a1a00 1px, transparent 1px);
-      background-size: 18px 18px;
-      color: var(--amarillo);
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #000;
       font-family: 'Special Elite', cursive;
-      min-height: 100vh;
-      overflow-x: hidden;
       cursor: crosshair;
     }
 
-    /* ─── PORTADA ─── */
+    /* ══════════════════════════════
+       PORTADA
+    ══════════════════════════════ */
     #portada {
-      width: 100vw;
-      height: 100vh;
+      width: 100vw; height: 100vh;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-      cursor: pointer;
-      background: #000;
       overflow: hidden;
+      background: #000;
     }
 
     #portada-img {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: contain;
     }
 
@@ -114,96 +109,139 @@
       50% { box-shadow: 8px 8px 0 var(--negro); }
     }
 
-    /* reemplazado */
-#portada.parpadeando {
-      animation: parpadeo 0.12s steps(1) 7;
+    #portada.flash {
+      animation: paginaComic 0.6s ease forwards;
     }
 
-    @keyframes parpadeo {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+    @keyframes paginaComic {
+      0%   { opacity: 1; filter: brightness(1); }
+      40%  { opacity: 1; filter: brightness(8); }
+      60%  { opacity: 0; filter: brightness(8); }
+      100% { opacity: 0; filter: brightness(1); }
     }
 
-    /* ─── ESCENA ─── */
+    /* ══════════════════════════════
+       ESCENA — VISUAL NOVEL
+    ══════════════════════════════ */
     #escena {
       display: none;
-      min-height: 100vh;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 60px 64px 80px;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* ─── CAPÍTULO LABEL ─── */
-    .capitulo-label {
+    /* Imagen/video de fondo a pantalla completa */
+    #escena-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* Gradiente oscuro abajo para legibilidad */
+    #escena-gradiente {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.92) 38%, rgba(0,0,0,0.2) 70%, transparent 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Puntos Ben-Day sutiles sobre el fondo */
+    #escena-benday {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.15) 1px, transparent 1px);
+      background-size: 14px 14px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ── CUADRO DE DIÁLOGO ── */
+    #dialogo {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 1200px;
+      z-index: 3;
+      padding: 0 48px 36px;
+    }
+
+    #capitulo-label {
       font-family: 'Bangers', cursive;
-      font-size: 13px;
+      font-size: 12px;
       letter-spacing: 6px;
       color: var(--rojo);
-      margin-bottom: 28px;
       text-transform: uppercase;
+      margin-bottom: 10px;
       border-left: 4px solid var(--rojo);
-      padding-left: 12px;
+      padding-left: 10px;
     }
 
-    /* ─── IMAGEN ─── */
-    #imagen-contenedor {
-      margin-bottom: 36px;
-    }
-
-    .img-escena {
-      width: 100%;
-      max-width: 400px;
-      margin: 0 auto;
-      display: block;
+    /* Caja de texto estilo cómic */
+    #caja-texto {
+      background: rgba(10, 10, 10, 0.93);
       border: 4px solid var(--negro);
-      box-shadow: 8px 8px 0 var(--rojo);
+      outline: 2px solid var(--amarillo);
+      box-shadow: 8px 8px 0 var(--negro);
+      padding: 24px 32px 20px;
+      margin-bottom: 16px;
+      min-height: 120px;
+      position: relative;
+      cursor: pointer;
     }
 
-    /* ─── TEXTO ─── */
     #texto-contenedor {
-      font-size: 20px;
-      line-height: 2;
+      font-size: 18px;
+      line-height: 1.8;
       color: var(--amarillo);
-      min-height: 200px;
       white-space: pre-wrap;
     }
 
-    /* ─── SEPARADOR ─── */
-    .separador {
-      width: 80px;
-      height: 4px;
-      background: var(--rojo);
-      margin: 44px 0;
-      border: none;
+    /* Indicador ▼ cuando el texto termina */
+    #indicador {
+      position: absolute;
+      bottom: 10px;
+      right: 16px;
+      font-family: 'Bangers', cursive;
+      font-size: 20px;
+      color: var(--amarillo);
+      display: none;
+      animation: pulsar-texto 0.8s ease-in-out infinite;
     }
 
-    /* ─── OPCIONES ─── */
+    /* ── CAJA DE OPCIONES ── */
     #opciones {
       opacity: 0;
-      transition: opacity 0.6s ease;
+      transition: opacity 0.5s ease;
     }
 
     #opciones.visible { opacity: 1; }
 
-    /* Caja contenedora de botones */
     .opciones-caja {
       border: 4px solid var(--negro);
       background: var(--amarillo);
       box-shadow: 8px 8px 0 var(--negro);
-      padding: 20px 24px;
+      padding: 16px 20px;
       display: inline-flex;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 12px;
+      align-items: center;
     }
 
     .opciones-caja-label {
       font-family: 'Bangers', cursive;
-      font-size: 13px;
+      font-size: 12px;
       letter-spacing: 4px;
       color: var(--negro);
+      opacity: 0.5;
       width: 100%;
-      margin-bottom: 4px;
-      opacity: 0.6;
+      margin-bottom: 2px;
     }
 
     .opcion-btn {
@@ -216,7 +254,7 @@
       padding: 10px 22px;
       cursor: pointer;
       box-shadow: 4px 4px 0 var(--negro);
-      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+      transition: transform 0.12s, box-shadow 0.12s, background 0.12s, color 0.12s;
       white-space: nowrap;
     }
 
@@ -229,33 +267,18 @@
 
     .opcion-btn:active {
       transform: translate(4px, 4px) scale(0.97);
-      box-shadow: 0px 0px 0 var(--negro);
+      box-shadow: 0 0 0 var(--negro);
     }
 
-    /* ─── TRANSICIONES ─── */
-    .escena-fade-out {
-      animation: fadeOut 0.25s ease forwards;
-    }
-    .escena-fade-in {
-      animation: fadeIn 0.35s ease forwards;
-    }
-
-    @keyframes fadeOut {
-      to { opacity: 0; transform: scale(0.99); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(1.01); }
-      to   { opacity: 1; transform: scale(1); }
-    }
-
-    /* ─── VIDEO ─── */
-    .video-escena {
-      width: 100%;
-      max-width: 700px;
-      margin: 0 auto 32px;
-      display: block;
-      border: 4px solid var(--negro);
-      box-shadow: 8px 8px 0 var(--rojo);
+    /* Flash de transición */
+    #flash-panel {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 999;
+      transition: opacity 0.15s;
     }
   </style>
 </head>
@@ -270,60 +293,64 @@
   <button id="btn-comenzar" onclick="iniciarJuego(event)">▶ COMENZAR</button>
 </div>
 
+<!-- FLASH -->
+<div id="flash-panel"></div>
+
 <!-- ESCENA -->
 <div id="escena">
-  <div class="capitulo-label" id="capitulo-label"></div>
-  <div id="imagen-contenedor"></div>
-  <div id="texto-contenedor"></div>
-  <div class="separador"></div>
-  <div id="opciones"></div>
+  <img id="escena-bg" src="" alt="">
+  <div id="escena-gradiente"></div>
+  <div id="escena-benday"></div>
+  <div id="dialogo">
+    <div id="capitulo-label"></div>
+    <div id="caja-texto" onclick="saltarEscritura()">
+      <div id="texto-contenedor"></div>
+      <div id="indicador">▼</div>
+    </div>
+    <div id="opciones"></div>
+  </div>
 </div>
 
 <script>
-// ─── SONIDO ───
+// ─── AUDIO ───
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function sonarClick() {
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
+  osc.connect(gain); gain.connect(audioCtx.destination);
   osc.type = 'square';
   osc.frequency.setValueAtTime(520, audioCtx.currentTime);
   osc.frequency.exponentialRampToValueAtTime(260, audioCtx.currentTime + 0.08);
   gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.1);
+  osc.start(); osc.stop(audioCtx.currentTime + 0.1);
 }
 
 function sonarMaquina() {
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
+  osc.connect(gain); gain.connect(audioCtx.destination);
   osc.type = 'sine';
   osc.frequency.setValueAtTime(900, audioCtx.currentTime);
   gain.gain.setValueAtTime(0.015, audioCtx.currentTime);
   gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.025);
-  osc.start();
-  osc.stop(audioCtx.currentTime + 0.025);
+  osc.start(); osc.stop(audioCtx.currentTime + 0.025);
 }
 
 // ─── PORTADA ───
 let fasePortada = 1;
 
 function clickPortada() {
-  if (fasePortada === 1) {
-    fasePortada = 2;
-    sonarClick();
-    const portada = document.getElementById('portada');
-    portada.classList.add('parpadeando');
-    setTimeout(() => {
-      portada.classList.remove('parpadeando');
-      portada.classList.add('fase2');
-    }, 600);
-  }
+  if (fasePortada !== 1) return;
+  fasePortada = 2;
+  sonarClick();
+  const p = document.getElementById('portada');
+  p.classList.add('flash');
+  setTimeout(() => {
+    p.classList.remove('flash');
+    p.classList.add('fase2');
+  }, 600);
 }
 
 function iniciarJuego(e) {
@@ -332,13 +359,20 @@ function iniciarJuego(e) {
   const el = document.documentElement;
   if (el.requestFullscreen) el.requestFullscreen();
   else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-  const portada = document.getElementById('portada');
-  portada.classList.add('parpadeando');
-  setTimeout(() => {
-    portada.style.display = 'none';
+  flashTransicion(() => {
+    document.getElementById('portada').style.display = 'none';
     document.getElementById('escena').style.display = 'block';
     irA('inicio');
-  }, 600);
+  });
+}
+
+function flashTransicion(cb) {
+  const panel = document.getElementById('flash-panel');
+  panel.style.opacity = '1';
+  setTimeout(() => {
+    if (cb) cb();
+    setTimeout(() => { panel.style.opacity = '0'; }, 80);
+  }, 150);
 }
 
 // ─── NODOS ───
@@ -400,6 +434,7 @@ Doña Elena no se mueve.`,
 
   reclamo_farmacia: {
     capitulo: "Reclamo heroico",
+    imagen: "img/camino_a_lafarmacia.png",
     texto: `Doña Elena no se mueve del mostrador.
 
 — Desde el mes pasado, me dice. Y antes del mes pasado ¿quién me avisó? ¿Una carta? ¿Un llamado? Nada.
@@ -479,7 +514,6 @@ Finalmente llega al cajero automático. La máquina parpadea con una pantalla az
 
   cajero: {
     capitulo: "Final · El dragón electrónico",
-    imagen: "img/cajero_come_tarjeta.png",
     imagen: "img/pelea_del_cajero.jpg",
     texto: `La pantalla parpadea. Doña Elena saca sus anteojos del bolso y los apoya despacio sobre su nariz.
 
@@ -495,9 +529,9 @@ Y entonces el cajero le vuelve a pedir.
 
 INGRESE LA TARJETA.
 
-Lo lee dos veces. Lo mira y enfurecida se transforma. Comienza una batalla, ¡era momento de hacer algo!.
+Lo lee dos veces. Lo mira y enfurecida se transforma. Comienza una batalla, ¡era momento de hacer algo!
 
-Logra sacar su tarjeta. El sol le pega en la cara. Pero ella, tiene sus billetes.
+Logra sacar su tarjeta. El sol le pega en la cara. Pero ella tiene sus billetes.
 
 — Le gané — dice en voz baja, para nadie.
 
@@ -509,7 +543,7 @@ Y camina hacia su casa.`,
 
   espera_banco: {
     capitulo: "Final · La espera intermitente",
-    imagen: "img/espera_del_banco_jpg",
+    imagen: "img/banco_santi.jpg",
     texto: `Doña Elena se sienta en una silla de plástico duro contra la pared. Le dijeron que espere.
 
 Espera.
@@ -646,25 +680,17 @@ Doña Elena mira por la ventana. El barrio pasa despacio.`,
 
 Sancho sonríe.
 
-Bajan juntes. La calle frente al Congreso esta llena, aun tienen que caminar y tiene ese ruido particular de la gente reunida con un propósito. No es una fiesta. Es algo más serio y más vivo que eso.
+Bajan juntes. La calle frente al Congreso esta llena. Tiene ese ruido particular de la gente reunida con un propósito. No es una fiesta. Es algo más serio y más vivo que eso.
 
-Sancho le señala el grupo con la cabeza.
+Alguien grita: — ¡NUESTROS DERECHOS NO SE INTERCAMBIAN!
 
-— Vamos.
+Otro grito: — Corran.
 
-Doña Elena lo sigue. Y mientras camina siente que los pies le pesan menos que esta mañana.
+Empieza una persecución. Los fantasmas del congreso han bajado a dar una batalla. Las fuerzas no le dan, pero algo en su pecho es más fuerte.
 
-Alguien grita, -¡NUESTROS DERECHOS NO SE INTERCAMBIAN!- ve a un grupo de personas y otro grito.
+— USTEDES TAMBIÉN LLEGARÁN A VIEJES — grita Elena.
 
--Corran.
-
-Empieza una persecución y los fantasmas del congreso han bajado a dar una batalla, comienza un combate.
-
-Las fuerzas no le dan, pero algo en su pecho es más fuerte.
-
--Se siente valienta y grita. - USTEDES TAMBIEN LLEGARAN A VIEJES -
-
-Sancho le pregunta ¿continuamos?`,
+Sancho le pregunta: ¿continuamos?`,
     opciones: [
       { texto: "Llegar al Congreso", destino: "congreso" },
     ]
@@ -772,71 +798,81 @@ Mañana vuelve a empezar. Y eso, piensa, también es una forma de ganar.`,
 };
 
 // ─── MOTOR ───
+let escribiendo = false;
+let textoCompleto = '';
+let textoIdx = 0;
+let timeoutEscribir = null;
 let nodoActual = null;
 
 function irA(id) {
   const nodo = nodos[id];
   if (!nodo) return;
-  nodoActual = id;
+  nodoActual = nodo;
 
-  const escena = document.getElementById('escena');
-  const contenedor = document.getElementById('texto-contenedor');
-  const opciones = document.getElementById('opciones');
-  const label = document.getElementById('capitulo-label');
-  const imgContenedor = document.getElementById('imagen-contenedor');
+  flashTransicion(() => {
+    // Fondo
+    const bg = document.getElementById('escena-bg');
+    bg.src = nodo.imagen || '';
 
-  escena.classList.add('escena-fade-out');
-
-  setTimeout(() => {
-    escena.classList.remove('escena-fade-out');
-    escena.classList.add('escena-fade-in');
-
+    // Reset
+    document.getElementById('capitulo-label').textContent = nodo.capitulo || '';
+    document.getElementById('texto-contenedor').textContent = '';
+    document.getElementById('indicador').style.display = 'none';
+    const opciones = document.getElementById('opciones');
     opciones.classList.remove('visible');
     opciones.innerHTML = '';
-    label.textContent = nodo.capitulo || '';
-    imgContenedor.innerHTML = nodo.imagen
-      ? '<img src="' + nodo.imagen + '" class="img-escena">'
-      : '';
-    contenedor.textContent = '';
 
-    const texto = nodo.texto;
-    let i = 0;
+    // Máquina de escribir
+    if (timeoutEscribir) clearTimeout(timeoutEscribir);
+    escribiendo = true;
+    textoCompleto = nodo.texto;
+    textoIdx = 0;
 
     function escribir() {
-      if (i < texto.length) {
-        contenedor.textContent += texto[i];
-        if (texto[i] !== ' ' && texto[i] !== '\n' && i % 4 === 0) sonarMaquina();
-        i++;
-        setTimeout(escribir, 22);
+      if (textoIdx < textoCompleto.length) {
+        document.getElementById('texto-contenedor').textContent += textoCompleto[textoIdx];
+        if (textoCompleto[textoIdx] !== ' ' && textoCompleto[textoIdx] !== '\n' && textoIdx % 4 === 0) sonarMaquina();
+        textoIdx++;
+        timeoutEscribir = setTimeout(escribir, 20);
       } else {
-        // Caja de opciones horizontal
-        const caja = document.createElement('div');
-        caja.className = 'opciones-caja';
-        const label2 = document.createElement('div');
-        label2.className = 'opciones-caja-label';
-        label2.textContent = '¿QUÉ HACÉS?';
-        caja.appendChild(label2);
-
-        nodo.opciones.forEach(op => {
-          const btn = document.createElement('button');
-          btn.className = 'opcion-btn';
-          btn.textContent = op.texto;
-          btn.onclick = () => {
-            sonarClick();
-            irA(op.destino);
-          };
-          caja.appendChild(btn);
-        });
-
-        opciones.appendChild(caja);
-        opciones.classList.add('visible');
+        escribiendo = false;
+        document.getElementById('indicador').style.display = 'block';
+        mostrarOpciones(nodo, opciones);
       }
     }
 
     escribir();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(() => escena.classList.remove('escena-fade-in'), 350);
-  }, 250);
+  });
+}
+
+function saltarEscritura() {
+  if (escribiendo) {
+    clearTimeout(timeoutEscribir);
+    escribiendo = false;
+    document.getElementById('texto-contenedor').textContent = textoCompleto;
+    document.getElementById('indicador').style.display = 'block';
+    const opciones = document.getElementById('opciones');
+    mostrarOpciones(nodoActual, opciones);
+  }
+}
+
+function mostrarOpciones(nodo, opciones) {
+  if (opciones.querySelector('.opciones-caja')) return;
+  const caja = document.createElement('div');
+  caja.className = 'opciones-caja';
+  const lbl = document.createElement('div');
+  lbl.className = 'opciones-caja-label';
+  lbl.textContent = '¿QUÉ HACÉS?';
+  caja.appendChild(lbl);
+  nodo.opciones.forEach(op => {
+    const btn = document.createElement('button');
+    btn.className = 'opcion-btn';
+    btn.textContent = op.texto;
+    btn.onclick = () => { sonarClick(); irA(op.destino); };
+    caja.appendChild(btn);
+  });
+  opciones.appendChild(caja);
+  opciones.classList.add('visible');
 }
 </script>
 </body>

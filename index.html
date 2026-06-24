@@ -401,8 +401,7 @@ Doña Elena toma el primer sorbo de mate y no dice nada. Ya sabe cómo termina e
     imagen: "img/inicio.png",
     texto: `Doña Elena estira el brazo y apaga el televisor.
 
-
-Se levanta. Mira por la ventana. El barrio está ahí, como siempre.`,
+    Se levanta. Mira por la ventana. El barrio está ahí, como siempre.`,
     opciones: [
       { texto: "Ir a la farmacia", destino: "farmacia" },
       { texto: "Ir al banco", destino: "banco" },
@@ -412,9 +411,10 @@ Se levanta. Mira por la ventana. El barrio está ahí, como siempre.`,
   farmacia: {
     capitulo: "La farmacia del barrio",
     imagen: "img/camino_a_lafarmacia.png",
-    texto: `Doña Elena anota en un papel arrugado los medicamentos que necesita. Los mismos de siempre. Sale a la calle con su bolso, despacio, con la certeza de quien ya sabe que el camino va a ser largo.
+    texto: `Doña Elena anota en un papel arrugado los medicamentos que necesita. Los mismos de siempre. Sale a la calle.
+Hay una fila interminable. 
 
-La farmacia del barrio huele a desinfectante y paciencia. Hay una fila interminable. Espera.
+Espera.
 
 Cuando llega su turno, extiende la receta y la cobertura médica sobre el mostrador. El farmacéutico la mira, teclea algo, y sin levantar los ojos dice:
 
@@ -422,6 +422,7 @@ Cuando llega su turno, extiende la receta y la cobertura médica sobre el mostra
 
 Doña Elena no se mueve.`,
     opciones: [
+      { texto: "Qué debería hacer?"}
       { texto: "Reclamar ahí mismo", destino: "reclamo_farmacia" },
       { texto: "Ir a otro lado", destino: "plaza" },
     ]
@@ -434,16 +435,15 @@ Doña Elena no se mueve.`,
 
 — Desde el mes pasado, me dice. Y antes del mes pasado ¿quién me avisó? ¿Una carta? ¿Un llamado? Nada.
 
-El farmacéutico la mira ahora. Hay una señora mayor con una receta en la mano y una voz que no tiembla.
+El farmacéutico la mira ahora. 
 
 — Estos medicamentos los tomo hace cuatro años. No son un capricho. Son lo que me mantiene de pie.
 
-La gente en la fila escucha. Nadie mira el celular.
+La gente en la fila escucha. Pero nadie hace nada.
 
-— Voy a hablar con el supervisor — dice el farmacéutico.
-
-Doña Elena asiente. Sabe que ganó algo, aunque todavía no sabe exactamente qué.`,
+— Voy a hablar con el supervisor — dice el farmacéutico.`,
     opciones: [
+      { texto:"¿Qué debería de hacer?"}
       { texto: "Ver qué pasa con el supervisor", destino: "final_farmacia" },
     ]
   },

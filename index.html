@@ -23,9 +23,6 @@
       cursor: crosshair;
     }
 
-    /* ══════════════════════════════
-       PORTADA
-    ══════════════════════════════ */
     #portada {
       width: 100vw; height: 100vh;
       position: relative;
@@ -120,9 +117,6 @@
       100% { opacity: 0; filter: brightness(1); }
     }
 
-    /* ══════════════════════════════
-       ESCENA — VISUAL NOVEL
-    ══════════════════════════════ */
     #escena {
       display: none;
       width: 100vw;
@@ -131,7 +125,6 @@
       overflow: hidden;
     }
 
-    /* Imagen/video de fondo a pantalla completa */
     #escena-bg {
       position: absolute;
       inset: 0;
@@ -141,7 +134,6 @@
       z-index: 0;
     }
 
-    /* Gradiente oscuro abajo para legibilidad */
     #escena-gradiente {
       position: absolute;
       inset: 0;
@@ -150,7 +142,6 @@
       pointer-events: none;
     }
 
-    /* Puntos Ben-Day sutiles sobre el fondo */
     #escena-benday {
       position: absolute;
       inset: 0;
@@ -160,7 +151,6 @@
       pointer-events: none;
     }
 
-    /* ── CUADRO DE DIÁLOGO ── */
     #dialogo {
       position: absolute;
       bottom: 0;
@@ -183,7 +173,6 @@
       padding-left: 10px;
     }
 
-    /* Caja de texto estilo cómic */
     #caja-texto {
       background: rgba(10, 10, 10, 0.93);
       border: 4px solid var(--negro);
@@ -191,19 +180,32 @@
       box-shadow: 8px 8px 0 var(--negro);
       padding: 24px 32px 20px;
       margin-bottom: 16px;
-      min-height: 120px;
+      height: 180px;
       position: relative;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     #texto-contenedor {
       font-size: 18px;
-      line-height: 1.8;
+      line-height: 1.7;
       color: var(--amarillo);
       white-space: pre-wrap;
     }
 
-    /* Indicador ▼ cuando el texto termina */
+    #paginador {
+      position: absolute;
+      bottom: 10px;
+      right: 16px;
+      font-family: 'Bangers', cursive;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--amarillo);
+      opacity: 0.5;
+    }
+
     #indicador {
       position: absolute;
       bottom: 10px;
@@ -215,7 +217,6 @@
       animation: pulsar-texto 0.8s ease-in-out infinite;
     }
 
-    /* ── CAJA DE OPCIONES ── */
     #opciones {
       opacity: 0;
       transition: opacity 0.5s ease;
@@ -270,7 +271,6 @@
       box-shadow: 0 0 0 var(--negro);
     }
 
-    /* Flash de transición */
     #flash-panel {
       position: fixed;
       inset: 0;
@@ -284,7 +284,6 @@
 </head>
 <body>
 
-<!-- PORTADA -->
 <div id="portada" onclick="clickPortada()">
   <img id="portada-img" src="img/portada.png" alt="Portada Doña Elena de la Mancha">
   <div id="portada-overlay">
@@ -293,10 +292,8 @@
   <button id="btn-comenzar" onclick="iniciarJuego(event)">▶ COMENZAR</button>
 </div>
 
-<!-- FLASH -->
 <div id="flash-panel"></div>
 
-<!-- ESCENA -->
 <div id="escena">
   <img id="escena-bg" src="" alt="">
   <div id="escena-gradiente"></div>
@@ -305,6 +302,7 @@
     <div id="capitulo-label"></div>
     <div id="caja-texto" onclick="saltarEscritura()">
       <div id="texto-contenedor"></div>
+      <div id="paginador"></div>
       <div id="indicador">▼</div>
     </div>
     <div id="opciones"></div>
@@ -312,7 +310,6 @@
 </div>
 
 <script>
-// ─── AUDIO ───
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function sonarClick() {
@@ -338,7 +335,6 @@ function sonarMaquina() {
   osc.start(); osc.stop(audioCtx.currentTime + 0.025);
 }
 
-// ─── PORTADA ───
 let fasePortada = 1;
 
 function clickPortada() {
@@ -375,7 +371,6 @@ function flashTransicion(cb) {
   }, 150);
 }
 
-// ─── NODOS ───
 const nodos = {
 
   inicio: {
@@ -422,7 +417,6 @@ Cuando llega su turno, extiende la receta y la cobertura médica sobre el mostra
 
 Doña Elena no se mueve.`,
     opciones: [
-      { texto: "Qué debería hacer?"}
       { texto: "Reclamar ahí mismo", destino: "reclamo_farmacia" },
       { texto: "Ir a otro lado", destino: "plaza" },
     ]
@@ -443,7 +437,6 @@ La gente en la fila escucha. Pero nadie hace nada.
 
 — Voy a hablar con el supervisor — dice el farmacéutico.`,
     opciones: [
-      { texto:"¿Qué debería de hacer?"}
       { texto: "Ver qué pasa con el supervisor", destino: "final_farmacia" },
     ]
   },
@@ -792,11 +785,8 @@ Mañana vuelve a empezar. Y eso, piensa, también es una forma de ganar.`,
 
 };
 
-// ─── MOTOR ───
-let escribiendo = false;
-let textoCompleto = '';
-let textoIdx = 0;
-let timeoutEscribir = null;
+let paginas = [];
+let paginaActual = 0;
 let nodoActual = null;
 
 function irA(id) {
@@ -804,50 +794,57 @@ function irA(id) {
   if (!nodo) return;
   nodoActual = nodo;
 
-  flashTransicion(() => {
-    // Fondo
-    const bg = document.getElementById('escena-bg');
-    bg.src = nodo.imagen || '';
+  // Dividir el texto en párrafos (viñetas), filtrando líneas vacías sueltas
+  paginas = nodo.texto
+    .split(/\n{2,}/)
+    .map(p => p.trim())
+    .filter(p => p.length > 0);
+  paginaActual = 0;
 
-    // Reset
+  flashTransicion(() => {
+    document.getElementById('escena-bg').src = nodo.imagen || '';
     document.getElementById('capitulo-label').textContent = nodo.capitulo || '';
-    document.getElementById('texto-contenedor').textContent = '';
-    document.getElementById('indicador').style.display = 'none';
+
     const opciones = document.getElementById('opciones');
     opciones.classList.remove('visible');
     opciones.innerHTML = '';
+    document.getElementById('indicador').style.display = 'none';
 
-    // Máquina de escribir
-    if (timeoutEscribir) clearTimeout(timeoutEscribir);
-    escribiendo = true;
-    textoCompleto = nodo.texto;
-    textoIdx = 0;
-
-    function escribir() {
-      if (textoIdx < textoCompleto.length) {
-        document.getElementById('texto-contenedor').textContent += textoCompleto[textoIdx];
-        if (textoCompleto[textoIdx] !== ' ' && textoCompleto[textoIdx] !== '\n' && textoIdx % 4 === 0) sonarMaquina();
-        textoIdx++;
-        timeoutEscribir = setTimeout(escribir, 20);
-      } else {
-        escribiendo = false;
-        document.getElementById('indicador').style.display = 'block';
-        mostrarOpciones(nodo, opciones);
-      }
-    }
-
-    escribir();
+    mostrarPagina();
   });
 }
 
-function saltarEscritura() {
-  if (escribiendo) {
-    clearTimeout(timeoutEscribir);
-    escribiendo = false;
-    document.getElementById('texto-contenedor').textContent = textoCompleto;
-    document.getElementById('indicador').style.display = 'block';
-    const opciones = document.getElementById('opciones');
+function mostrarPagina() {
+  const contenedor = document.getElementById('texto-contenedor');
+  const paginador = document.getElementById('paginador');
+  const indicador = document.getElementById('indicador');
+  const opciones = document.getElementById('opciones');
+
+  const esUltima = paginaActual === paginas.length - 1;
+
+  contenedor.textContent = paginas[paginaActual];
+
+  if (paginas.length > 1) {
+    paginador.textContent = `${paginaActual + 1} / ${paginas.length}`;
+  } else {
+    paginador.textContent = '';
+  }
+
+  if (esUltima) {
+    indicador.style.display = 'none';
     mostrarOpciones(nodoActual, opciones);
+  } else {
+    indicador.style.display = 'block';
+    opciones.classList.remove('visible');
+    opciones.innerHTML = '';
+  }
+}
+
+function saltarEscritura() {
+  if (paginaActual < paginas.length - 1) {
+    sonarClick();
+    paginaActual++;
+    mostrarPagina();
   }
 }
 
@@ -872,3 +869,4 @@ function mostrarOpciones(nodo, opciones) {
 </script>
 </body>
 </html>
+

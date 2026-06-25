@@ -349,11 +349,8 @@ function clickPortada() {
   fasePortada = 2;
   sonarClick();
   const p = document.getElementById('portada');
-  p.classList.add('flash');
-  setTimeout(() => {
-    p.classList.remove('flash');
-    p.classList.add('fase2');
-  }, 600);
+  p.classList.add('fase2');
+
 }
 
 function iniciarJuego(e) {

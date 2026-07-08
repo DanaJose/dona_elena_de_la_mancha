@@ -310,6 +310,8 @@
       <div id="indicador">▼</div>
     </div>
     <div id="opciones"></div>
+    <div id="flash-panel"></div>
+<audio id="musica-fondo" src="sonidos/el_taco_en_flor.mp3" loop preload="auto"></audio>
   </div>
 </div>
 
@@ -363,6 +365,23 @@ function flashTransicion(cb) {
   }, 150);
 }
 
+function iniciarJuego(e) {
+  e.stopPropagation();
+  sonarClick();
+
+  const musica = document.getElementById('musica-fondo');
+  musica.volume = 0.35;
+  musica.play().catch(() => {});
+
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  flashTransicion(() => {
+    document.getElementById('portada').style.display = 'none';
+    document.getElementById('escena').style.display = 'block';
+    irA('inicio');
+  });
+}
 // ── NODOS ──
 const nodos = {
 
@@ -552,7 +571,7 @@ Doña Elena apaga el televisor de un manotazo y antes de salir escribe en un pap
 
   salir: {
     capitulo: "Salir a la calle",
-    imagen: "video/calle.mp4",
+    imagen: "video/calle.MOV",
     texto: `La puerta del edificio suena al cerrarse detrás suyo.
 
 Doña Elena está en la vereda. El aire le pega en la cara, fresco, real.

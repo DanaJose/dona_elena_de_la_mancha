@@ -368,7 +368,7 @@ const nodos = {
 
   inicio: {
     capitulo: "San Cristóbal · Un miércoles cualquiera",
-    imagen: "video/san_cristobal_02.mp4",
+    imagen: "video/san_cristobal.MOV",
     texto: `San Cristóbal, un miércoles que parece todos los demás.
 
 Doña Elena tiene 76 años y se despierta sola. 
@@ -383,7 +383,7 @@ Se levanta despacio, va a la cocina, pone el agua a hervir. El mate, el pan, la 
 
   apagar_tv: {
     capitulo: "El gesto de apagar",
-    imagen: "img/inicio.png",
+    imagen: "video/apaga_tv.MOV",
     texto: `Doña Elena estira el brazo y apaga el televisor.
 
 Se levanta. Mira por la ventana. El barrio está ahí, como siempre.`,
@@ -395,7 +395,7 @@ Se levanta. Mira por la ventana. El barrio está ahí, como siempre.`,
 
   farmacia: {
     capitulo: "La farmacia del barrio",
-    imagen: "video/ir_farmacia_01.mp4",
+    imagen: "video/camino_farmacia.MOV",
     texto: `Doña Elena anota en un papel arrugado los medicamentos que necesita y sale a la calle.
 Hay una fila interminable. Espera.
 
@@ -412,7 +412,7 @@ Doña Elena no se mueve.`,
 
   reclamo_farmacia: {
     capitulo: "Reclamo heroico",
-    imagen: "video/dentro_de_farmacia.mp4",
+    imagen: "video/dentro_farmacia.MOV",
     texto: `Doña Elena no se mueve del mostrador.
 
 — Desde el mes pasado, me dice. Y antes del mes pasado ¿quién me avisó?, ¡ni un llamado! Nada.
@@ -442,7 +442,7 @@ Espera mientras preparan el paquete. Lo recibe con las dos manos. Doña Elena ga
 
   plaza: {
     capitulo: "La plaza del barrio",
-    imagen: "video/plaza.mp4",
+    imagen: "video/plaza.MOV",
     texto: `Doña Elena sale de la farmacia sin los medicamentos y sin saber bien a dónde va, se sienta en la banqueta de la plaza.
 
 Respira y piensa en el farmacéutico. En la receta. En los números que vio esta mañana en el televisor.
@@ -456,7 +456,7 @@ Algo tiene que hacer. Pero ¿qué?`,
 
   banco: {
     capitulo: "El banco · Día de cobro",
-    imagen: "video/banco.mp4",
+    imagen: "video/banco.MOV",
     texto: `Era día de cobro. Doña Elena lo tenía marcado en el almanaque desde hacía una semana.
 
 Llega al banco y la fila dobla la esquina. Suspira, toma un número y espera de pie porque los bancos nunca tienen suficientes sillas.
@@ -470,7 +470,7 @@ Después de cuarenta minutos la derivan a otro sector.`,
 
   cajero: {
     capitulo: "Final · El dragón electrónico",
-    imagen: "video/cajero_1.mp4",
+    imagen: "video/cajer_final_1.MOV",
     texto: `La pantalla parpadea. Doña Elena saca sus anteojos del bolso y lee cada instrucción. 
 
 Ingrese su clave. La ingresa.
@@ -483,13 +483,22 @@ Y entonces el cajero le vuelve a pedir.
 
 INGRESE LA TARJETA.
 
-Comienza una batalla, ¡era momento de hacer algo!
-
-Logra sacar su tarjeta. — Le gané — dice en voz baja, Y camina hacia su casa.`,
+Comienza una batalla, ¡era momento de hacer algo!`,
     opciones: [
+      { texto:"batalla con cajero", destino: "gane_del_cajero"},
       { texto: "↩ Volver al inicio", destino: "inicio" },
     ]
   },
+
+  gane_del_cajero: {
+    capitulo: "Lucha . Seguimos resistiendo",
+    imagen: "video/gane_cajero.MOV",
+    texto: `Luego de una batalla campal Doña Elena lo ha logrado`,
+     opciones:[
+     { texto: "↩ Volver al inicio", destino: "inicio" },
+    ]
+  },
+
 
   espera_banco: {
     capitulo: "Final · La espera intermitente",
@@ -514,7 +523,7 @@ El banco va cerrando de a poco. Las persianas bajan a medias. Doña Elena sabe q
 
   tv: {
     capitulo: "Las voces del televisor",
-    imagen: "video/tv.mp4",
+    imagen: "video/enciende_tv.MOV",
     texto: `Doña Elena decide no salir. Apoya el mate sobre la mesa y se hunde un poco más en el sillón.
 
 El televisor sigue. Un conductor habla rápido, las imágenes se cortan, los números aparecen en pantalla. Jubilaciones. Medicamentos. Ajuste. Déficit.
@@ -530,7 +539,7 @@ De a poco algo empieza a moverse adentro suyo. No es bronca todavía. Es algo an
 
   cambio: {
     capitulo: "El cambio de personalidad",
-    imagen: "video/transformacion.mp4",
+    imagen: "video/transformacin.MOV",
     texto: `Algo se rompe adentro. O tal vez se arma.
 
 Doña Elena apaga el televisor de un manotazo y antes de salir escribe en un papel:
@@ -593,7 +602,7 @@ Doña Elena mira por la ventana. El barrio pasa despacio.`,
 
   bajarse_sancho: {
     capitulo: "Bajarse con Sancho",
-    imagen: "video/pelea.mp4",
+    imagen: "video/pelea.MOV",
     texto: `Doña Elena y Sancho llegan a la plaza.
 
 — Llegamos — Sancho sonríe.
@@ -647,7 +656,7 @@ Doña Elena se para en el medio de todo eso y siente algo extraño. No está sol
 
   final_victoria: {
     capitulo: "Final · Victoria en el Congreso",
-    imagen: "video/gane.mp4",
+    imagen: "video/gane_final.MOV",
     texto: `Tres días después el teléfono de Doña Elena suena con una notificación.
 
 Los medicamentos vuelven a estar cubiertos. No todos. Pero los suyos, sí.
@@ -662,7 +671,7 @@ Después llama a Sancho. Él atiende al segundo ring, como si estuviera esperand
 
   final_lucha: {
     capitulo: "Final · La lucha sin cesar",
-    imagen: "vide/abrazo.mp4",
+    imagen: "video/abrazo_1.MOV",
     texto: `No hubo respuesta oficial.
 
 Doña Elena vuelve a su casa en el colectivo, — ¿Y ahora? — pregunta ella.

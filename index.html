@@ -90,6 +90,7 @@
       object-fit: contain;
       z-index: 0;
       display: none;
+      filter: brightness(1.15);
     }
 
     #escena-video {
@@ -740,6 +741,7 @@ function irA(id) {
       bg.style.display = 'none';
       vid.style.display = 'block';
       vid.src = nodo.imagen;
+      vid.volume = 0.5;
       vid.load();
       vid.play().catch(() => {});
     } else {
